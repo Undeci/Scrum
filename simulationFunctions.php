@@ -1,7 +1,7 @@
 <?php
 
 function hasRightNeighbour($loc) {
-    if ((($loc + 1) % $_SESSION["dimension"] != 0))
+    if ( ($loc + 1) % $_SESSION["dimension"] != 0)
         return true;
 }
 
@@ -102,7 +102,8 @@ function love($simulation) {
                 $simulation[$randomEmpty]['type'] = 'H';
                 $simulation[$randomEmpty]['life'] = 10;
 //                $_SESSION["action"][$randomEmpty] = true;      //baby herbivoor niet paren
-                unset($Elocation[$random]);
+                
+                $Elocation = array_diff($Elocation, array($randomEmpty));
             }
         }
     }
@@ -138,34 +139,47 @@ function move($simulation) {
     $Hlocation = array();
     $Clocation = array();
     $Elocation = array();
-    foreach ($simulation as $location => $key) {
-        if ($key['type'] == 'H')
+    foreach ($simulation as $location => $organism) {
+        if ($organism['type'] == 'H')
             $Hlocation[] = $location;
-        if ($key['type'] == 'C')
+        if ($organism['type'] == 'C')
             $Clocation[] = $location;
-        if ($key == null)
+        if ($organism == null)
             $Elocation[] = $location;
     }
+    
     foreach ($Clocation as $carnivore) {
-        if (hasRightNeighbour($carnivore) && rightNeighbour($simulation, $carnivore) == null && !$_SESSION["action"][$carnivore]) {
+                
+        if (hasRightNeighbour($carnivore) & rightNeighbour($simulation, $carnivore) == null && !$_SESSION["action"][$carnivore]) {
             
-            $moveCandidates[] = $carnivore + 1;
-            if (($carnivore > $_SESSION["dimension"] - 1) && in_array($carnivore - $_SESSION["dimension"], $Elocation))
-                $moveCandidates[] = $carnivore - $_SESSION["dimension"];
-            if ( $carnivore < ($_SESSION["dimension"] * ($_SESSION["dimension"] - 1)) && in_array($carnivore + $_SESSION["dimension"], $Elocation) )
-                $moveCandidates[] = $carnivore + $_SESSION["dimension"];
-            if ( ($carnivore % $_SESSION["dimension"]) != 0 && in_array($carnivore - 1, $Elocation) )
-                $moveCandidates[] = $carnivore - 1;
+//            $moveCandidates[] = $carnivore + 1;
+//            if (($carnivore > $_SESSION["dimension"] - 1) && in_array($carnivore - $_SESSION["dimension"], $Elocation))
+//                $moveCandidates[] = $carnivore - $_SESSION["dimension"];
+//            if ( $carnivore < ($_SESSION["dimension"] * ($_SESSION["dimension"] - 1)) && in_array($carnivore + $_SESSION["dimension"], $Elocation) )
+//                $moveCandidates[] = $carnivore + $_SESSION["dimension"];
+//            if ( ($carnivore % $_SESSION["dimension"]) != 0 && in_array($carnivore - 1, $Elocation) )
+//                $moveCandidates[] = $carnivore - 1;
+            $moveCandidates = array($carnivore - $_SESSION["dimension"], $carnivore + $_SESSION["dimension"], $carnivore - 1, $carnivore + 1);
             
-            $moveloc = array_rand($moveCandidates);
+            do {
+                $moveloc = array_rand($moveCandidates, 1);
+                $moveloc = $moveCandidates[$moveloc];
+            } while (!in_array($moveloc, $Elocation));
+            
+//            $moveloc = array_rand($moveCandidates);
+//            $moveloc = $moveCandidates[$moveloc];
 
-            $simulation[$moveCandidates[$moveloc]] = $simulation[$carnivore];
-            $_SESSION["action"][$moveCandidates[$moveloc]] = true;
+            $simulation[$moveloc] = $simulation[$carnivore];
+            $_SESSION["action"][$moveloc] = true;
             $simulation[$carnivore] = null;
+            
+            $Elocation[] = $carnivore;
+            $Elocation = array_diff($Elocation, array($moveloc));
         }
     }
     foreach ($Hlocation as $herbivore) {
-        if (hasRightNeighbour($herbivore) && rightNeighbour($simulation, $herbivore) == null && !$_SESSION["action"][$herbivore]) {
+        
+        if (hasRightNeighbour($herbivore) & rightNeighbour($simulation, $herbivore) == null && !$_SESSION["action"][$herbivore]) {
             $moveCandidates = array($herbivore - $_SESSION["dimension"], $herbivore + $_SESSION["dimension"], $herbivore - 1, $herbivore + 1);
             
             $moveCandidates[] = $herbivore + 1;
@@ -177,10 +191,13 @@ function move($simulation) {
                 $moveCandidates[] = $herbivore - 1;
             
             $moveloc = array_rand($moveCandidates);
+            $moveloc = $moveCandidates[$moveloc];
 
-            $simulation[$moveCandidates[$moveloc]] = $simulation[$herbivore];
-            $_SESSION["action"][$moveCandidates[$moveloc]] = true;
-            $simulation[$herbivore] = null;
+            $simulation[$moveloc] = $simulation[$herbivore];
+            $_SESSION["action"][$moveloc] = true;
+            $simulation[$herbivore] = null;           
+            $Elocation[] = $herbivore;
+            $Elocation = array_diff($Elocation, array($moveloc));
         }
     }
     unset($_SESSION["action"]);

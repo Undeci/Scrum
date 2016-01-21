@@ -44,6 +44,7 @@ do {
     $simulation[$day] = spawnOnePlant($simulation[$day]);
 
     $simMatrix[$day] = array_chunk($simulation[$day], $_SESSION["dimension"]);
+
     for ($i = 0; $i < $_SESSION["dimension"]; $i++) {
         for ($j = 0; $j < $_SESSION["dimension"]; $j++) {
             if ($simMatrix[$day][$i][$j]) {
@@ -57,20 +58,22 @@ do {
             }
         }
     }
-} while (count($simulation[$day]) - count(array_keys($simulation[$day], null)) < $_SESSION["dimension"] ** 2)
+} while (count($simulation[$day]) - count(array_keys($simulation[$day], null)) < $_SESSION["dimension"] ** 2);
+        
+include 'presentation_temp.php';
 ?>
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <title></title>
     </head>
     <body>       
-        <?php
-        echo '<pre>';
-        print_r($simMatrix);
-        print_r($_SESSION["simData"]);
-        echo '</pre>'
-        ?>
+        //<?php
+//        echo '<pre>';
+//        print_r($simMatrix);
+//        print_r($_SESSION["simData"]);
+//        echo '</pre>'
+//        ?>
     </body>
-</html>
+</html>-->
