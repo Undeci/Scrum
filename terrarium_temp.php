@@ -41,7 +41,7 @@ do {
     $simulation[$day] = love($simulation[$day]);
     $simulation[$day] = fight($simulation[$day]);
     $simulation[$day] = move($simulation[$day]);
-    $simulation[$day] = spawnPlants($simulation[$day]);
+    $simulation[$day] = spawnOnePlant($simulation[$day]);
 
     $simMatrix[$day] = array_chunk($simulation[$day], $_SESSION["dimension"]);
     for ($i = 0; $i < $_SESSION["dimension"]; $i++) {

@@ -47,8 +47,8 @@ function spawnOnePlant($simulation) {
     }
     if (count($Elocation) > 0) {
         $random = array_rand($Elocation, 1);
-        $simulation[$random]['type'] = 'P';
-        $simulation[$random]['life'] = 1;
+        $simulation[$Elocation[$random]]['type'] = 'P';
+        $simulation[$Elocation[$random]]['life'] = 1;
     }
     return $simulation;
 }
@@ -101,6 +101,7 @@ function love($simulation) {
                 $randomEmpty = $Elocation[$random];
                 $simulation[$randomEmpty]['type'] = 'H';
                 $simulation[$randomEmpty]['life'] = 10;
+//                $_SESSION["action"][$randomEmpty] = true;      //baby herbivoor niet paren
                 unset($Elocation[$random]);
             }
         }
