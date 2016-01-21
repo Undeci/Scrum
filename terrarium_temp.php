@@ -1,6 +1,7 @@
 <?php
 require 'simulationFunctions.php';
 session_start();
+
 $_SESSION["dimension"] = $_POST["dimension"];
 $_SESSION["startNrPlants"] = $_POST["startNrPlants"];
 $_SESSION["startNrCarnivores"] = $_POST["startNrCarnivore"];
@@ -11,7 +12,11 @@ if ($_SESSION["startNrPlants"] + $_SESSION["startNrCarnivores"] + $_SESSION["sta
     exit(0);
 }
 $day = 0;
+
 do {
+    for ($i = 0; $i < $_SESSION["dimension"] ** 2; $i++)
+        $_SESSION["action"][] = false;
+
     if ($day == 0) {
         $simulation[$day] = generateDay0();
         $simMatrix[$day] = array_chunk($simulation[$day], $_SESSION["dimension"]);
@@ -30,13 +35,13 @@ do {
         }
     }
     $day++;
-    
+
     $simulation[$day] = $simulation[$day - 1];
-    $simulation[$day] = eat($simulation[$day]);     
-    $simulation[$day] = love($simulation[$day]);  
-    $simulation[$day] = fight($simulation[$day]); 
-    $simulation[$day] = move($simulation[$day]); 
-    $simulation[$day] = spawnPlants($simulation[$day]); 
+    $simulation[$day] = eat($simulation[$day]);
+    $simulation[$day] = love($simulation[$day]);
+    $simulation[$day] = fight($simulation[$day]);
+    $simulation[$day] = move($simulation[$day]);
+    $simulation[$day] = spawnPlants($simulation[$day]);
 
     $simMatrix[$day] = array_chunk($simulation[$day], $_SESSION["dimension"]);
     for ($i = 0; $i < $_SESSION["dimension"]; $i++) {
@@ -62,7 +67,6 @@ do {
     </head>
     <body>       
         <?php
-      
         echo '<pre>';
         print_r($simMatrix);
         print_r($_SESSION["simData"]);
