@@ -1,6 +1,5 @@
 <?php
-require 'simulationFunctions.php';
-session_start();
+require 'simulationFunctions_temp.php';
 
 $_SESSION["dimension"] = $_POST["dimension"];
 $_SESSION["startNrPlants"] = $_POST["startNrPlants"];

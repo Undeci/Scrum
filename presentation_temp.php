@@ -13,7 +13,7 @@ and open the template in the editor.
     <body>
         <div>
             
-            <h1>Simulatie</h1>
+            <h1>Simulation</h1>
 
             <?php foreach ($simMatrix as $key => $day) { ?>
                 
@@ -33,5 +33,12 @@ and open the template in the editor.
             <?php
             }
             ?>
+        
+        <h1>Simulation Data</h1>
+        <pre>
+            <?php
+            print_r($_SESSION["simData"]);
+        ?>
+        </pre>
     </body>
 </html>
