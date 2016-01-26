@@ -22,7 +22,7 @@ class SimulationDAO {
     public function getSimulationById($id) {
         
         $sql = "select simulation, dimension, days, startplant, startherbivore, startcarnivore, winner from terrariumsimulations where id = $id";        
-        $dbh = new PDO("mysql:host=localhost;dbname=terrarium;charset=utf8", "root", "undeci");
+        $dbh = new PDO("mysql:host=localhost;dbname=terrarium;charset=utf8", "root", "");
         $stmt = $dbh->prepare($sql);        
 	$stmt->execute();        
         $resultset = $stmt->fetch(PDO::FETCH_NUM);        
